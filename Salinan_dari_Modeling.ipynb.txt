@@ -1,0 +1,1893 @@
+{
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 3,
+      "metadata": {
+        "id": "O99_QPfwQlrX",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "976b4ece-a2c7-451c-fabe-794491b8b838"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: gdown in /usr/local/lib/python3.10/dist-packages (4.6.6)\n",
+            "Requirement already satisfied: filelock in /usr/local/lib/python3.10/dist-packages (from gdown) (3.12.2)\n",
+            "Requirement already satisfied: requests[socks] in /usr/local/lib/python3.10/dist-packages (from gdown) (2.27.1)\n",
+            "Requirement already satisfied: six in /usr/local/lib/python3.10/dist-packages (from gdown) (1.16.0)\n",
+            "Requirement already satisfied: tqdm in /usr/local/lib/python3.10/dist-packages (from gdown) (4.65.0)\n",
+            "Requirement already satisfied: beautifulsoup4 in /usr/local/lib/python3.10/dist-packages (from gdown) (4.11.2)\n",
+            "Requirement already satisfied: soupsieve>1.2 in /usr/local/lib/python3.10/dist-packages (from beautifulsoup4->gdown) (2.4.1)\n",
+            "Requirement already satisfied: urllib3<1.27,>=1.21.1 in /usr/local/lib/python3.10/dist-packages (from requests[socks]->gdown) (1.26.16)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests[socks]->gdown) (2023.5.7)\n",
+            "Requirement already satisfied: charset-normalizer~=2.0.0 in /usr/local/lib/python3.10/dist-packages (from requests[socks]->gdown) (2.0.12)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-packages (from requests[socks]->gdown) (3.4)\n",
+            "Requirement already satisfied: PySocks!=1.5.7,>=1.5.6 in /usr/local/lib/python3.10/dist-packages (from requests[socks]->gdown) (1.7.1)\n",
+            "Collecting googletrans==3.1.0a0\n",
+            "  Downloading googletrans-3.1.0a0.tar.gz (19 kB)\n",
+            "  Preparing metadata (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "Collecting httpx==0.13.3 (from googletrans==3.1.0a0)\n",
+            "  Downloading httpx-0.13.3-py3-none-any.whl (55 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m55.1/55.1 kB\u001b[0m \u001b[31m3.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: certifi in /usr/local/lib/python3.10/dist-packages (from httpx==0.13.3->googletrans==3.1.0a0) (2023.5.7)\n",
+            "Collecting hstspreload (from httpx==0.13.3->googletrans==3.1.0a0)\n",
+            "  Downloading hstspreload-2023.1.1-py3-none-any.whl (1.5 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.5/1.5 MB\u001b[0m \u001b[31m30.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: sniffio in /usr/local/lib/python3.10/dist-packages (from httpx==0.13.3->googletrans==3.1.0a0) (1.3.0)\n",
+            "Collecting chardet==3.* (from httpx==0.13.3->googletrans==3.1.0a0)\n",
+            "  Downloading chardet-3.0.4-py2.py3-none-any.whl (133 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m133.4/133.4 kB\u001b[0m \u001b[31m17.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting idna==2.* (from httpx==0.13.3->googletrans==3.1.0a0)\n",
+            "  Downloading idna-2.10-py2.py3-none-any.whl (58 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m58.8/58.8 kB\u001b[0m \u001b[31m6.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting rfc3986<2,>=1.3 (from httpx==0.13.3->googletrans==3.1.0a0)\n",
+            "  Downloading rfc3986-1.5.0-py2.py3-none-any.whl (31 kB)\n",
+            "Collecting httpcore==0.9.* (from httpx==0.13.3->googletrans==3.1.0a0)\n",
+            "  Downloading httpcore-0.9.1-py3-none-any.whl (42 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m42.6/42.6 kB\u001b[0m \u001b[31m4.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting h11<0.10,>=0.8 (from httpcore==0.9.*->httpx==0.13.3->googletrans==3.1.0a0)\n",
+            "  Downloading h11-0.9.0-py2.py3-none-any.whl (53 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m53.6/53.6 kB\u001b[0m \u001b[31m4.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting h2==3.* (from httpcore==0.9.*->httpx==0.13.3->googletrans==3.1.0a0)\n",
+            "  Downloading h2-3.2.0-py2.py3-none-any.whl (65 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m65.0/65.0 kB\u001b[0m \u001b[31m7.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting hyperframe<6,>=5.2.0 (from h2==3.*->httpcore==0.9.*->httpx==0.13.3->googletrans==3.1.0a0)\n",
+            "  Downloading hyperframe-5.2.0-py2.py3-none-any.whl (12 kB)\n",
+            "Collecting hpack<4,>=3.0 (from h2==3.*->httpcore==0.9.*->httpx==0.13.3->googletrans==3.1.0a0)\n",
+            "  Downloading hpack-3.0.0-py2.py3-none-any.whl (38 kB)\n",
+            "Building wheels for collected packages: googletrans\n",
+            "  Building wheel for googletrans (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for googletrans: filename=googletrans-3.1.0a0-py3-none-any.whl size=16352 sha256=b5642daf28648ce16e50f725b1a1463dab6173bd324225927ffa8b10612fa17a\n",
+            "  Stored in directory: /root/.cache/pip/wheels/50/5d/3c/8477d0af4ca2b8b1308812c09f1930863caeebc762fe265a95\n",
+            "Successfully built googletrans\n",
+            "Installing collected packages: rfc3986, hyperframe, hpack, h11, chardet, idna, hstspreload, h2, httpcore, httpx, googletrans\n",
+            "  Attempting uninstall: chardet\n",
+            "    Found existing installation: chardet 4.0.0\n",
+            "    Uninstalling chardet-4.0.0:\n",
+            "      Successfully uninstalled chardet-4.0.0\n",
+            "  Attempting uninstall: idna\n",
+            "    Found existing installation: idna 3.4\n",
+            "    Uninstalling idna-3.4:\n",
+            "      Successfully uninstalled idna-3.4\n",
+            "Successfully installed chardet-3.0.4 googletrans-3.1.0a0 h11-0.9.0 h2-3.2.0 hpack-3.0.0 hstspreload-2023.1.1 httpcore-0.9.1 httpx-0.13.3 hyperframe-5.2.0 idna-2.10 rfc3986-1.5.0\n",
+            "Downloading...\n",
+            "From: https://drive.google.com/uc?id=1H5jcIkC-5JIfFy4ltshacav8NR9ZG42R\n",
+            "To: /content/data.csv\n",
+            "100% 634k/634k [00:00<00:00, 98.0MB/s]\n",
+            "Downloading...\n",
+            "From: https://drive.google.com/uc?id=1cP5V1U2gNJmCnGf9vFcj2xREebD5ApWD\n",
+            "To: /content/data_with_english.csv\n",
+            "100% 920k/920k [00:00<00:00, 179MB/s]\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install gdown\n",
+        "!pip3 install googletrans==3.1.0a0\n",
+        "\n",
+        "!gdown 1H5jcIkC-5JIfFy4ltshacav8NR9ZG42R\n",
+        "!gdown 1cP5V1U2gNJmCnGf9vFcj2xREebD5ApWD"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 4,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "X4xMmwqSz71m",
+        "outputId": "dfe06f81-7e68-41cb-ff54-14842b00f907"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "[nltk_data] Downloading package punkt to /root/nltk_data...\n",
+            "[nltk_data]   Unzipping tokenizers/punkt.zip.\n",
+            "[nltk_data] Downloading package stopwords to /root/nltk_data...\n",
+            "[nltk_data]   Unzipping corpora/stopwords.zip.\n",
+            "[nltk_data] Downloading package wordnet to /root/nltk_data...\n",
+            "[nltk_data] Downloading package averaged_perceptron_tagger to\n",
+            "[nltk_data]     /root/nltk_data...\n",
+            "[nltk_data]   Unzipping taggers/averaged_perceptron_tagger.zip.\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "True"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 4
+        }
+      ],
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "\n",
+        "from googletrans import Translator, constants\n",
+        "from pprint import pprint\n",
+        "\n",
+        "from numpy.random import randint\n",
+        "from sklearn.base import BaseEstimator, TransformerMixin\n",
+        "\n",
+        "import string\n",
+        "\n",
+        "import nltk\n",
+        "from nltk.corpus import stopwords, wordnet\n",
+        "from nltk.tokenize import word_tokenize\n",
+        "from nltk.corpus import stopwords\n",
+        "from nltk.util import ngrams\n",
+        "from nltk.stem import WordNetLemmatizer\n",
+        "\n",
+        "from wordcloud import WordCloud, STOPWORDS\n",
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.preprocessing import LabelEncoder\n",
+        "from imblearn.under_sampling import RandomUnderSampler\n",
+        "from imblearn.over_sampling import RandomOverSampler\n",
+        "\n",
+        "from sklearn.feature_extraction.text import TfidfVectorizer\n",
+        "from sklearn.pipeline import Pipeline\n",
+        "from sklearn.naive_bayes import GaussianNB, MultinomialNB, ComplementNB\n",
+        "from  sklearn.model_selection import StratifiedKFold\n",
+        "from sklearn.model_selection import cross_validate\n",
+        "\n",
+        "from tensorflow.keras.models import Sequential\n",
+        "from tensorflow.keras.layers import Dense, Embedding, TextVectorization, GlobalAveragePooling1D, Dropout, LSTM\n",
+        "from tensorflow.keras.losses import SparseCategoricalCrossentropy\n",
+        "from tensorflow.nn import softmax\n",
+        "from tensorflow.keras.optimizers import Adam\n",
+        "\n",
+        "from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score\n",
+        "from tensorflow.keras import regularizers\n",
+        "\n",
+        "nltk.download('punkt')\n",
+        "nltk.download('stopwords')\n",
+        "nltk.download('wordnet')\n",
+        "nltk.download('averaged_perceptron_tagger')"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "aFeIS4Rhjkxd"
+      },
+      "source": [
+        "# Translate Judul ke Bahasa Inggris\n",
+        "\n",
+        "Semua data judul akan di translate ke Bahasa Inggris. Hasilnya kemudian akan disimpan dalam file `data_with_english.csv`. Proses ini hanya dilakukan sekali dan tidak akan dimasukkan kedalam pipeline selama proses pemodelan karena proses translate 3600 san judul membutuhkan waktu yang lama."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "id": "8nBtjJyOQX2o",
+        "outputId": "ec3808f7-6064-404b-fa7e-442b90c9d6da"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "                                    Nama Dosen                    Bidang  \\\n",
+              "0     Dr. Sri Suning Kusumawardani, S.T., M.T.      Software Engineering   \n",
+              "1     Dr. Sri Suning Kusumawardani, S.T., M.T.      Software Engineering   \n",
+              "2     Dr. Sri Suning Kusumawardani, S.T., M.T.      Software Engineering   \n",
+              "3     Dr. Sri Suning Kusumawardani, S.T., M.T.      Software Engineering   \n",
+              "4     Dr. Sri Suning Kusumawardani, S.T., M.T.      Software Engineering   \n",
+              "...                                        ...                       ...   \n",
+              "3625     Dr. Ir. Risanuri Hidayat, M.Sc., IPM.  Network & Cyber Security   \n",
+              "3626     Dr. Ir. Risanuri Hidayat, M.Sc., IPM.  Network & Cyber Security   \n",
+              "3627     Dr. Ir. Risanuri Hidayat, M.Sc., IPM.  Network & Cyber Security   \n",
+              "3628     Dr. Ir. Risanuri Hidayat, M.Sc., IPM.  Network & Cyber Security   \n",
+              "3629     Dr. Ir. Risanuri Hidayat, M.Sc., IPM.  Network & Cyber Security   \n",
+              "\n",
+              "                                        Judul Publikasi  \\\n",
+              "0     Performance analysis of objective function MRH...   \n",
+              "1     A systematic review of ontology use in E-Learn...   \n",
+              "2     Prototipe sistem e-learning dengan pendekatan ...   \n",
+              "3     A Proposed Model for Detecting Learning Styles...   \n",
+              "4     Design adaptive learning system using metacogn...   \n",
+              "...                                                 ...   \n",
+              "3625  Pengenalan Wajah dengan Menggunakan Dimensi Fr...   \n",
+              "3626  Review pada Estimasi Spektral Daya pada Kawasa...   \n",
+              "3627  PENGENALAN VOKAL MENGGUNAKAN TRANSFORMASI WAVE...   \n",
+              "3628  Pilot Aided Channel Estimation in MIMO-OFDM Us...   \n",
+              "3629  QoS Framework: Architecture for Providing Subj...   \n",
+              "\n",
+              "                                                Authors Citation    Year  \n",
+              "0                 N Pradeska, W Najib, SS Kusumawardani       55  2016.0  \n",
+              "1               NW Rahayu, R Ferdiana, SS Kusumawardani       40  2022.0  \n",
+              "2           E Ismantohadi, LE Nugroho, SS Kusumawardani       25  2015.0  \n",
+              "3     MS Hasibuan, LE Nugroho, PI Santosa, SS Kusuma...       24  2016.0  \n",
+              "4     K Agustianto, AE Permanasari, SS Kusumawardani...       21  2016.0  \n",
+              "...                                                 ...      ...     ...  \n",
+              "3625                   D Suryadi, R Hidayat, HA Nugroho      NaN     NaN  \n",
+              "3626             HNP Wisudawan, DD Ariananda, R Hidayat      NaN     NaN  \n",
+              "3627                  R Nandika, R Hidayat, S Sumaryono      NaN     NaN  \n",
+              "3628                AF Isnawati, R Hidayat, B Setiyanto      NaN     NaN  \n",
+              "3629         R Wardani, LE Nugroho, A Ashari, R Hidayat      NaN     NaN  \n",
+              "\n",
+              "[3630 rows x 6 columns]"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-345b1290-38e1-4d2d-8416-d4fb2f83ece1\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Nama Dosen</th>\n",
+              "      <th>Bidang</th>\n",
+              "      <th>Judul Publikasi</th>\n",
+              "      <th>Authors</th>\n",
+              "      <th>Citation</th>\n",
+              "      <th>Year</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>Dr. Sri Suning Kusumawardani, S.T., M.T.</td>\n",
+              "      <td>Software Engineering</td>\n",
+              "      <td>Performance analysis of objective function MRH...</td>\n",
+              "      <td>N Pradeska, W Najib, SS Kusumawardani</td>\n",
+              "      <td>55</td>\n",
+              "      <td>2016.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>Dr. Sri Suning Kusumawardani, S.T., M.T.</td>\n",
+              "      <td>Software Engineering</td>\n",
+              "      <td>A systematic review of ontology use in E-Learn...</td>\n",
+              "      <td>NW Rahayu, R Ferdiana, SS Kusumawardani</td>\n",
+              "      <td>40</td>\n",
+              "      <td>2022.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>Dr. Sri Suning Kusumawardani, S.T., M.T.</td>\n",
+              "      <td>Software Engineering</td>\n",
+              "      <td>Prototipe sistem e-learning dengan pendekatan ...</td>\n",
+              "      <td>E Ismantohadi, LE Nugroho, SS Kusumawardani</td>\n",
+              "      <td>25</td>\n",
+              "      <td>2015.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>Dr. Sri Suning Kusumawardani, S.T., M.T.</td>\n",
+              "      <td>Software Engineering</td>\n",
+              "      <td>A Proposed Model for Detecting Learning Styles...</td>\n",
+              "      <td>MS Hasibuan, LE Nugroho, PI Santosa, SS Kusuma...</td>\n",
+              "      <td>24</td>\n",
+              "      <td>2016.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>Dr. Sri Suning Kusumawardani, S.T., M.T.</td>\n",
+              "      <td>Software Engineering</td>\n",
+              "      <td>Design adaptive learning system using metacogn...</td>\n",
+              "      <td>K Agustianto, AE Permanasari, SS Kusumawardani...</td>\n",
+              "      <td>21</td>\n",
+              "      <td>2016.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3625</th>\n",
+              "      <td>Dr. Ir. Risanuri Hidayat, M.Sc., IPM.</td>\n",
+              "      <td>Network &amp; Cyber Security</td>\n",
+              "      <td>Pengenalan Wajah dengan Menggunakan Dimensi Fr...</td>\n",
+              "      <td>D Suryadi, R Hidayat, HA Nugroho</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3626</th>\n",
+              "      <td>Dr. Ir. Risanuri Hidayat, M.Sc., IPM.</td>\n",
+              "      <td>Network &amp; Cyber Security</td>\n",
+              "      <td>Review pada Estimasi Spektral Daya pada Kawasa...</td>\n",
+              "      <td>HNP Wisudawan, DD Ariananda, R Hidayat</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3627</th>\n",
+              "      <td>Dr. Ir. Risanuri Hidayat, M.Sc., IPM.</td>\n",
+              "      <td>Network &amp; Cyber Security</td>\n",
+              "      <td>PENGENALAN VOKAL MENGGUNAKAN TRANSFORMASI WAVE...</td>\n",
+              "      <td>R Nandika, R Hidayat, S Sumaryono</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3628</th>\n",
+              "      <td>Dr. Ir. Risanuri Hidayat, M.Sc., IPM.</td>\n",
+              "      <td>Network &amp; Cyber Security</td>\n",
+              "      <td>Pilot Aided Channel Estimation in MIMO-OFDM Us...</td>\n",
+              "      <td>AF Isnawati, R Hidayat, B Setiyanto</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3629</th>\n",
+              "      <td>Dr. Ir. Risanuri Hidayat, M.Sc., IPM.</td>\n",
+              "      <td>Network &amp; Cyber Security</td>\n",
+              "      <td>QoS Framework: Architecture for Providing Subj...</td>\n",
+              "      <td>R Wardani, LE Nugroho, A Ashari, R Hidayat</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>3630 rows × 6 columns</p>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-345b1290-38e1-4d2d-8416-d4fb2f83ece1')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-345b1290-38e1-4d2d-8416-d4fb2f83ece1 button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-345b1290-38e1-4d2d-8416-d4fb2f83ece1');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 3
+        }
+      ],
+      "source": [
+        "data = pd.read_csv('data.csv')\n",
+        "data"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "YTE9Mj6pgATZ"
+      },
+      "outputs": [],
+      "source": [
+        "list_judul = data['Judul Publikasi'].to_list()\n",
+        "\n",
+        "judul_translated = []\n",
+        "translator = Translator()\n",
+        "for judul in list_judul:\n",
+        "    translation = translator.translate(judul)\n",
+        "    judul_translated.append(translation.text)\n",
+        "\n",
+        "data['Judul Publikasi English'] = judul_translated\n",
+        "data.to_csv('data_with_english.csv', index=False)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "f9NqpjbalV6s"
+      },
+      "source": [
+        "# Pemodelan"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "dPn35zvri5BE"
+      },
+      "source": [
+        "## Read Data and Define Function"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 5,
+      "metadata": {
+        "id": "RPlLbIbMlX3v",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 131
+        },
+        "outputId": "f34eb787-f361-4155-ec38-24bbb80ceac0"
+      },
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "SyntaxError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;36m  File \u001b[0;32m\"<ipython-input-5-d509317bf222>\"\u001b[0;36m, line \u001b[0;32m46\u001b[0m\n\u001b[0;31m    \"\"\"Map POS tag to first character lemmatize() accepts\"\"\"\u001b[0m\n\u001b[0m       ^\u001b[0m\n\u001b[0;31mSyntaxError\u001b[0m\u001b[0;31m:\u001b[0m invalid syntax\n"
+          ]
+        }
+      ],
+      "source": [
+        "data = pd.read_csv('data_with_english.csv')\n",
+        "\n",
+        "\n",
+        "\n",
+        "\n",
+        "        return tag_dict.get(tag, wordnet.NOUN)\n",
+        "\n",
+        "    def transform(self, X, y=None, return_string=True):\n",
+        "        is_series, is_numpy, is_list = self._check_type(X)\n",
+        "\n",
+        "\n",
+        "        if not is_list: X = list(X)\n",
+        "\n",
+        "        temp_X = []\n",
+        "        for text in X:\n",
+        "            # case folding to lowercase\n",
+        "            text = text.lower()\n",
+        "\n",
+        "            # remove digits and punctuation\n",
+        "            text = (text.translate(str.maketrans('', '', string.digits))\n",
+        "                        .translate(str.maketrans('', '', string.punctuation)))\n",
+        "\n",
+        "            # tokenizing\n",
+        "            text = word_tokenize(text)\n",
+        "\n",
+        "            # remove stopwords\n",
+        "            text = [w for w in text if not w in self.stop_words]\n",
+        "\n",
+        "            # lemmatization\n",
+        "            text = [self.lemmatizer.lemmatize(w, self.get_wordnet_pos(w)) for w in text]\n",
+        "\n",
+        "            if return_string:\n",
+        "                text = ' '.join(text)\n",
+        "\n",
+        "            temp_X.append(text)\n",
+        "\n",
+        "        return self._return_based_on_type(temp_X)\"\"\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data_new = pd.read_csv(\"data_with_english.csv\")"
+      ],
+      "metadata": {
+        "id": "ZmZBg8lrOB_4"
+      },
+      "execution_count": 7,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "IUD9E7IhTb7l"
+      },
+      "source": [
+        "## Explorasi"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9_EcSohYxxyM",
+        "outputId": "3bb56abf-6d77-448e-d063-661bdeca14d2"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "1340"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 6
+        }
+      ],
+      "source": [
+        "duplication = data['Judul Publikasi'].str.lower().str.replace(' ', '').duplicated()\n",
+        "duplication.sum()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "3b81blZ4y2hJ"
+      },
+      "source": [
+        "Ada 919 baris yang duplikasi"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 380
+        },
+        "id": "dDWu9H3RyJw-",
+        "outputId": "772f76f5-e664-42b3-88c6-3e9396fa5737"
+      },
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "TypeError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mTypeError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-8-aa13ba77c807>\u001b[0m in \u001b[0;36m<cell line: 2>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0mduplication_judul\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mduplication\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'Judul Publikasi'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mlen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0munique\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mduplication_judul\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/numpy/core/overrides.py\u001b[0m in \u001b[0;36munique\u001b[0;34m(*args, **kwargs)\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/numpy/lib/arraysetops.py\u001b[0m in \u001b[0;36munique\u001b[0;34m(ar, return_index, return_inverse, return_counts, axis)\u001b[0m\n\u001b[1;32m    270\u001b[0m     \u001b[0mar\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0masanyarray\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mar\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    271\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0maxis\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 272\u001b[0;31m         \u001b[0mret\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_unique1d\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mar\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mreturn_index\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mreturn_inverse\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mreturn_counts\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    273\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0m_unpack_tuple\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mret\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    274\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/numpy/lib/arraysetops.py\u001b[0m in \u001b[0;36m_unique1d\u001b[0;34m(ar, return_index, return_inverse, return_counts)\u001b[0m\n\u001b[1;32m    331\u001b[0m         \u001b[0maux\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mar\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mperm\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    332\u001b[0m     \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 333\u001b[0;31m         \u001b[0mar\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msort\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    334\u001b[0m         \u001b[0maux\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mar\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    335\u001b[0m     \u001b[0mmask\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mempty\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0maux\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mshape\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdtype\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mbool_\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mTypeError\u001b[0m: '<' not supported between instances of 'str' and 'float'"
+          ]
+        }
+      ],
+      "source": [
+        "duplication_judul = data[duplication]['Judul Publikasi']\n",
+        "len(np.unique(duplication_judul))"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "qRI7oJ4ry6lF"
+      },
+      "source": [
+        "Ternyata ada 860 judul yang duplikasi. Judul tersebut akan dihapus"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 956
+        },
+        "id": "6f0m94-iy_gB",
+        "outputId": "18cfa17d-a32a-4098-8ce4-4be574dac652"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "                                             Nama Dosen     Bidang  \\\n",
+              "1330      Teguh Bharata Adji, S.T., M.T., M.Eng., Ph.D.  Data & AI   \n",
+              "1626  Ir. Noor Akhmad Setiawan, S.T., M.T., Ph.D., IPM.  Data & AI   \n",
+              "1962                Dr. Eng. Igi Ardiyanto, S.T., M.Eng  Data & AI   \n",
+              "2213    Ir. Hanung Adi Nugroho, S.T., M.E., Ph.D., IPM.  Data & AI   \n",
+              "1842      Dr.Eng. Ir. Sunu Wibirama, S.T., M.Eng., IPM.  Data & AI   \n",
+              "...                                                 ...        ...   \n",
+              "3376                                                NaN        NaN   \n",
+              "3377                                                NaN        NaN   \n",
+              "3378                                                NaN        NaN   \n",
+              "3379                                                NaN        NaN   \n",
+              "3380                                                NaN        NaN   \n",
+              "\n",
+              "                                        Judul Publikasi  \\\n",
+              "1330  3D dynamic UAV path planning for interception ...   \n",
+              "1626  3D dynamic UAV path planning for interception ...   \n",
+              "1962  3D human face reconstruction using depth senso...   \n",
+              "2213  3d gaze tracking in real world environment usi...   \n",
+              "1842  3d gaze tracking in real world environment usi...   \n",
+              "...                                                 ...   \n",
+              "3376                                                NaN   \n",
+              "3377                                                NaN   \n",
+              "3378                                                NaN   \n",
+              "3379                                                NaN   \n",
+              "3380                                                NaN   \n",
+              "\n",
+              "                                              Authors Citation    Year  \\\n",
+              "1330             HH Triharminto, TB Adji, NA Setiawan        8  2013.0   \n",
+              "1626             HH Triharminto, TB Adji, NA Setiawan        8  2013.0   \n",
+              "1962                   R Siv, I Ardiyanto, R Hartanto        8  2018.0   \n",
+              "2213  S Mujahidin, S Wibirama, HA Nugroho, K Hamamoto        6  2016.0   \n",
+              "1842  S Mujahidin, S Wibirama, HA Nugroho, K Hamamoto        6  2016.0   \n",
+              "...                                               ...      ...     ...   \n",
+              "3376                                              NaN      NaN     NaN   \n",
+              "3377                                              NaN      NaN     NaN   \n",
+              "3378                                              NaN      NaN     NaN   \n",
+              "3379                                              NaN      NaN     NaN   \n",
+              "3380                                              NaN      NaN     NaN   \n",
+              "\n",
+              "                                Judul Publikasi English  \n",
+              "1330  3D dynamic UAV path planning for interception ...  \n",
+              "1626  3D dynamic UAV path planning for interception ...  \n",
+              "1962  3D human face reconstruction using depth senso...  \n",
+              "2213  3d gaze tracking in real world environment usi...  \n",
+              "1842  3d gaze tracking in real world environment usi...  \n",
+              "...                                                 ...  \n",
+              "3376                                                 in  \n",
+              "3377                                                 in  \n",
+              "3378                                                 in  \n",
+              "3379                                                 in  \n",
+              "3380                                                 in  \n",
+              "\n",
+              "[2156 rows x 7 columns]"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-6f574ec2-f04b-441d-9fc0-3b026b9217b6\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Nama Dosen</th>\n",
+              "      <th>Bidang</th>\n",
+              "      <th>Judul Publikasi</th>\n",
+              "      <th>Authors</th>\n",
+              "      <th>Citation</th>\n",
+              "      <th>Year</th>\n",
+              "      <th>Judul Publikasi English</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>1330</th>\n",
+              "      <td>Teguh Bharata Adji, S.T., M.T., M.Eng., Ph.D.</td>\n",
+              "      <td>Data &amp; AI</td>\n",
+              "      <td>3D dynamic UAV path planning for interception ...</td>\n",
+              "      <td>HH Triharminto, TB Adji, NA Setiawan</td>\n",
+              "      <td>8</td>\n",
+              "      <td>2013.0</td>\n",
+              "      <td>3D dynamic UAV path planning for interception ...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1626</th>\n",
+              "      <td>Ir. Noor Akhmad Setiawan, S.T., M.T., Ph.D., IPM.</td>\n",
+              "      <td>Data &amp; AI</td>\n",
+              "      <td>3D dynamic UAV path planning for interception ...</td>\n",
+              "      <td>HH Triharminto, TB Adji, NA Setiawan</td>\n",
+              "      <td>8</td>\n",
+              "      <td>2013.0</td>\n",
+              "      <td>3D dynamic UAV path planning for interception ...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1962</th>\n",
+              "      <td>Dr. Eng. Igi Ardiyanto, S.T., M.Eng</td>\n",
+              "      <td>Data &amp; AI</td>\n",
+              "      <td>3D human face reconstruction using depth senso...</td>\n",
+              "      <td>R Siv, I Ardiyanto, R Hartanto</td>\n",
+              "      <td>8</td>\n",
+              "      <td>2018.0</td>\n",
+              "      <td>3D human face reconstruction using depth senso...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2213</th>\n",
+              "      <td>Ir. Hanung Adi Nugroho, S.T., M.E., Ph.D., IPM.</td>\n",
+              "      <td>Data &amp; AI</td>\n",
+              "      <td>3d gaze tracking in real world environment usi...</td>\n",
+              "      <td>S Mujahidin, S Wibirama, HA Nugroho, K Hamamoto</td>\n",
+              "      <td>6</td>\n",
+              "      <td>2016.0</td>\n",
+              "      <td>3d gaze tracking in real world environment usi...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1842</th>\n",
+              "      <td>Dr.Eng. Ir. Sunu Wibirama, S.T., M.Eng., IPM.</td>\n",
+              "      <td>Data &amp; AI</td>\n",
+              "      <td>3d gaze tracking in real world environment usi...</td>\n",
+              "      <td>S Mujahidin, S Wibirama, HA Nugroho, K Hamamoto</td>\n",
+              "      <td>6</td>\n",
+              "      <td>2016.0</td>\n",
+              "      <td>3d gaze tracking in real world environment usi...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3376</th>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>in</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3377</th>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>in</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3378</th>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>in</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3379</th>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>in</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3380</th>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>in</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>2156 rows × 7 columns</p>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-6f574ec2-f04b-441d-9fc0-3b026b9217b6')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-6f574ec2-f04b-441d-9fc0-3b026b9217b6 button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-6f574ec2-f04b-441d-9fc0-3b026b9217b6');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 9
+        }
+      ],
+      "source": [
+        "data[data['Judul Publikasi'].isin(duplication_judul)].sort_values('Judul Publikasi')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "3mLuu9nPzaHb",
+        "outputId": "d6936f05-df89-483a-d0a3-ff474dbdf18d"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Ir. Hanung Adi Nugroho, S.T., M.E., Ph.D., IPM.              151\n",
+              "Prof. Ir. P. Insap Santosa, M.Sc., Ph.D., IPU.               124\n",
+              "Prof. Ir. Lukito Edi Nugroho, M.Sc., Ph.D.                   117\n",
+              "Dr. Ir. Risanuri Hidayat, M.Sc., IPM.                        116\n",
+              "Dr. Indah Soesanti, S.T., M.T.                               116\n",
+              "Prof. Ir. Selo, S.T., M.T., M.Sc., Ph.D., IPU, ASEAN Eng.     93\n",
+              "Dr. Ir. Ridi Ferdiana, S.T., M.T., IPM.                       87\n",
+              "Adhistya Erna Permanasari, S.T., M.T., Ph.D.                  87\n",
+              "Dr. Sri Suning Kusumawardani, S.T., M.T.                      86\n",
+              "Teguh Bharata Adji, S.T., M.T., M.Eng., Ph.D.                 79\n",
+              "Ir. Noor Akhmad Setiawan, S.T., M.T., Ph.D., IPM.             77\n",
+              "Dr. Ir. Rudy Hartanto, M.T., IPM.                             62\n",
+              "Dr. Eng. Igi Ardiyanto, S.T., M.Eng                           48\n",
+              "Dr.Eng. Ir. Sunu Wibirama, S.T., M.Eng., IPM.                 48\n",
+              "Warsun Najib, S.T., M.Sc.                                     47\n",
+              "Dr.Eng. Silmi Fauziati, S.T., M.T.                            39\n",
+              "Dr. Bimo Sunarfri Hantono, S.T., M.Eng.                       28\n",
+              "Guntur Dharma Putra, S.T., M.Sc.                              27\n",
+              "Dani Adhipta, S.Si., M.T.                                     24\n",
+              "Ir. Sujoko Sumaryono, M.T.                                    18\n",
+              "Name: Nama Dosen, dtype: int64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 10
+        }
+      ],
+      "source": [
+        "data_new = data[~data['Judul Publikasi'].isin(duplication_judul)]\n",
+        "data_new['Nama Dosen'].value_counts()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "fHpqCDT0iPAp"
+      },
+      "outputs": [],
+      "source": [
+        "def make_word_cloud(num_rows, num_cols, df):\n",
+        "    all_dosen = list(np.unique(df['Nama Dosen']))\n",
+        "\n",
+        "    fig, axs = plt.subplots(num_rows, num_cols, figsize=(17, 8))\n",
+        "\n",
+        "    i = 0\n",
+        "    for j in range(num_rows):\n",
+        "        for k in range(num_cols):\n",
+        "            dosen = all_dosen[i]\n",
+        "            token = df[df['Nama Dosen'] == dosen]['hasil_preprocessing']\n",
+        "            token = word_tokenize(' '.join(token.to_list()))\n",
+        "            imgs = WordCloud(width = 800, height = 800,\n",
+        "                    background_color ='white',\n",
+        "                    min_font_size = 10).generate(\" \".join(token))\n",
+        "\n",
+        "            axs[j][k].imshow(imgs)\n",
+        "            axs[j][k].axis(\"off\")\n",
+        "            axs[j][k].set_title(dosen, size=8)\n",
+        "\n",
+        "            i += 1\n",
+        "\n",
+        "    plt.tight_layout(pad = 0)\n",
+        "    plt.show()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 359
+        },
+        "id": "sTjzLAzziPAy",
+        "outputId": "bde73c28-f0f8-493e-d231-b37fdeb45c47"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "<ipython-input-11-33602f16ffc9>:4: SettingWithCopyWarning: \n",
+            "A value is trying to be set on a copy of a slice from a DataFrame.\n",
+            "Try using .loc[row_indexer,col_indexer] = value instead\n",
+            "\n",
+            "See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy\n",
+            "  data_new['hasil_preprocessing'] = preprocessing_result\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-11-33602f16ffc9>\u001b[0m in \u001b[0;36m<cell line: 6>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0mdata_new\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'hasil_preprocessing'\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpreprocessing_result\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 6\u001b[0;31m \u001b[0mmake_word_cloud\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m4\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m5\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdata_new\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'make_word_cloud' is not defined"
+          ]
+        }
+      ],
+      "source": [
+        "preprocessor = PreprocessingText()\n",
+        "preprocessing_result = preprocessor.fit_transform(data_new['Judul Publikasi English'].to_numpy())\n",
+        "\n",
+        "data_new['hasil_preprocessing'] = preprocessing_result\n",
+        "\n",
+        "make_word_cloud(4, 5, data_new)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "-IcuQ7O1aBTP"
+      },
+      "outputs": [],
+      "source": [
+        "word_count = pd.Series(word_tokenize(' '.join(data_new['Judul Publikasi English'].str.lower().to_list()))).value_counts().to_frame().reset_index()\n",
+        "word_count['len'] = word_count['index'].str.len()\n",
+        "\n",
+        "my_stop_word = word_count[word_count[0] == 1]['index'].to_list() + ['using', 'system', 'based'] + word_count[word_count['len'] < 3]['index'].to_list()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "cXW-rm40G9Mo"
+      },
+      "source": [
+        "## Split Data"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data_new = data_new[['Judul Publikasi English','Nama Dosen']]"
+      ],
+      "metadata": {
+        "id": "vhoZK2U8r34T"
+      },
+      "execution_count": 8,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data_new['Judul Publikasi English'] = data_new['Judul Publikasi English'].str.lower()\n",
+        "\n",
+        "\n",
+        "data_new['Nama Dosen']= data_new['Nama Dosen'].str.lower()"
+      ],
+      "metadata": {
+        "id": "oeowJ-woyr23"
+      },
+      "execution_count": 11,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data_new.head()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 206
+        },
+        "id": "P5qCA-wpzIdI",
+        "outputId": "60afed6c-ea8b-45ed-c670-a3451b2071a1"
+      },
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "                             Judul Publikasi English  \\\n",
+              "0  performance analysis of objective function mrh...   \n",
+              "1  a systematic review of ontology use in e-learn...   \n",
+              "2  e-learning system prototype with a vark learni...   \n",
+              "3  a proposed model for detecting learning styles...   \n",
+              "4  design adaptive learning system using metacogn...   \n",
+              "\n",
+              "                                 Nama Dosen  \n",
+              "0  dr. sri suning kusumawardani, s.t., m.t.  \n",
+              "1  dr. sri suning kusumawardani, s.t., m.t.  \n",
+              "2  dr. sri suning kusumawardani, s.t., m.t.  \n",
+              "3  dr. sri suning kusumawardani, s.t., m.t.  \n",
+              "4  dr. sri suning kusumawardani, s.t., m.t.  "
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-96e13e53-8c9e-46b2-ba3a-795f803140a6\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Judul Publikasi English</th>\n",
+              "      <th>Nama Dosen</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>performance analysis of objective function mrh...</td>\n",
+              "      <td>dr. sri suning kusumawardani, s.t., m.t.</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>a systematic review of ontology use in e-learn...</td>\n",
+              "      <td>dr. sri suning kusumawardani, s.t., m.t.</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>e-learning system prototype with a vark learni...</td>\n",
+              "      <td>dr. sri suning kusumawardani, s.t., m.t.</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>a proposed model for detecting learning styles...</td>\n",
+              "      <td>dr. sri suning kusumawardani, s.t., m.t.</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>design adaptive learning system using metacogn...</td>\n",
+              "      <td>dr. sri suning kusumawardani, s.t., m.t.</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-96e13e53-8c9e-46b2-ba3a-795f803140a6')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-96e13e53-8c9e-46b2-ba3a-795f803140a6 button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-96e13e53-8c9e-46b2-ba3a-795f803140a6');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 12
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "HQPiTPr7O1dn"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "t4WKf-L3HA5I"
+      },
+      "outputs": [],
+      "source": [
+        "X, y = data_new['Judul Publikasi English'], data_new['Nama Dosen']\n",
+        "\n",
+        "rus = RandomOverSampler(random_state=27)\n",
+        "X, y = rus.fit_resample(np.reshape(X.to_numpy(), (-1, 1)), np.reshape(y.to_numpy(), (-1, 1)))\n",
+        "X, y = X.reshape(-1), y.reshape(-1)\n",
+        "\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=27)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "XwkGHtSPH5ZY",
+        "outputId": "55988df0-b1f4-476a-f1c6-fd3da068564f"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Jumlah data train:  (2416,)\n",
+            "Jumlah data test :  (604,)\n",
+            "Total dataset: 3020\n"
+          ]
+        }
+      ],
+      "source": [
+        "print(\"Jumlah data train: \", X_train.shape)\n",
+        "print(\"Jumlah data test : \", X_test.shape)\n",
+        "print(\"Total dataset:\", X_train.shape[0] + X_test.shape[0])"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "kdXFskwbIO6q",
+        "outputId": "b0bc6af2-b7eb-4e26-eecb-fa20fd74c984"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Dr. Sri Suning Kusumawardani, S.T., M.T.                     151\n",
+              "Dr. Bimo Sunarfri Hantono, S.T., M.Eng.                      151\n",
+              "Guntur Dharma Putra, S.T., M.Sc.                             151\n",
+              "Warsun Najib, S.T., M.Sc.                                    151\n",
+              "Dani Adhipta, S.Si., M.T.                                    151\n",
+              "Ir. Sujoko Sumaryono, M.T.                                   151\n",
+              "Adhistya Erna Permanasari, S.T., M.T., Ph.D.                 151\n",
+              "Dr. Indah Soesanti, S.T., M.T.                               151\n",
+              "Ir. Hanung Adi Nugroho, S.T., M.E., Ph.D., IPM.              151\n",
+              "Dr. Eng. Igi Ardiyanto, S.T., M.Eng                          151\n",
+              "Dr.Eng. Ir. Sunu Wibirama, S.T., M.Eng., IPM.                151\n",
+              "Ir. Noor Akhmad Setiawan, S.T., M.T., Ph.D., IPM.            151\n",
+              "Dr.Eng. Silmi Fauziati, S.T., M.T.                           151\n",
+              "Teguh Bharata Adji, S.T., M.T., M.Eng., Ph.D.                151\n",
+              "Prof. Ir. P. Insap Santosa, M.Sc., Ph.D., IPU.               151\n",
+              "Dr. Ir. Rudy Hartanto, M.T., IPM.                            151\n",
+              "Prof. Ir. Lukito Edi Nugroho, M.Sc., Ph.D.                   151\n",
+              "Dr. Ir. Ridi Ferdiana, S.T., M.T., IPM.                      151\n",
+              "Prof. Ir. Selo, S.T., M.T., M.Sc., Ph.D., IPU, ASEAN Eng.    151\n",
+              "Dr. Ir. Risanuri Hidayat, M.Sc., IPM.                        151\n",
+              "dtype: int64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 18
+        }
+      ],
+      "source": [
+        "pd.Series(y).value_counts()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "vGI6riWc6qID"
+      },
+      "source": [
+        "## Preprocessing"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "7U_hbLxl6sp6"
+      },
+      "outputs": [],
+      "source": [
+        "y_encoder = LabelEncoder()\n",
+        "\n",
+        "preprocessor = PreprocessingText()\n",
+        "X_train_processed = preprocessor.fit_transform(X_train)\n",
+        "X_test_processed = preprocessor.transform(X_test)\n",
+        "\n",
+        "y_train_label = y_encoder.fit_transform(y_train)\n",
+        "y_test_label = y_encoder.transform(y_test)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "XlVNm_yP1J-D"
+      },
+      "source": [
+        "## Cross Validation"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "-yX3P3pij8ny"
+      },
+      "outputs": [],
+      "source": [
+        "class DenseTfidfVectorizer(TfidfVectorizer):\n",
+        "    def transform(self, raw_documents, copy=True):\n",
+        "        X = super().transform(raw_documents)\n",
+        "        return X.toarray()\n",
+        "\n",
+        "    def fit_transform(self, raw_documents, y=None):\n",
+        "        X = super().fit_transform(raw_documents, y=y)\n",
+        "        return X.toarray()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "aBLVP3eIrF9O"
+      },
+      "source": [
+        "### Naive Bayes"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "wGT07N4BxzVj",
+        "outputId": "2b724f11-843a-4595-c342-346bb7fee443"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Average fit_time 0.03531646728515625\n",
+            "Average score_time 0.014522695541381836\n",
+            "Average test_f1_macro 0.7314702702919696\n",
+            "Average test_accuracy 0.7446144106223158\n",
+            "Average test_precision_macro 0.7632357161603125\n",
+            "Average test_recall_macro 0.7434966555183946\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "{'fit_time': array([0.06391859, 0.02799129, 0.02701163, 0.02790594, 0.02975488]),\n",
+              " 'score_time': array([0.0159359 , 0.01693296, 0.01348662, 0.0131824 , 0.01307559]),\n",
+              " 'test_f1_macro': array([0.74486163, 0.75560738, 0.75802464, 0.7068997 , 0.69195801]),\n",
+              " 'test_accuracy': array([0.75619835, 0.76604555, 0.76397516, 0.72670807, 0.71014493]),\n",
+              " 'test_precision_macro': array([0.7682727 , 0.78089066, 0.77970536, 0.75509114, 0.73221872]),\n",
+              " 'test_recall_macro': array([0.75469717, 0.76549329, 0.76325494, 0.72490152, 0.70913636])}"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 21
+        }
+      ],
+      "source": [
+        "pipe = Pipeline([\n",
+        "    ('tfidf', TfidfVectorizer()),\n",
+        "    ('naive_bayes', MultinomialNB())\n",
+        "])\n",
+        "\n",
+        "cv = StratifiedKFold(n_splits=5, random_state=27, shuffle=True)\n",
+        "result = cross_validate(pipe, X_train, y_train, cv=cv, scoring=['f1_macro', 'accuracy', 'precision_macro', 'recall_macro'])\n",
+        "\n",
+        "for key in result.keys():\n",
+        "    print(f\"Average {key}\", np.mean(result[key]))\n",
+        "result"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "rGpUXxfs_jVl"
+      },
+      "source": [
+        "### Neural Network"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "_KTAwBcDPF9R",
+        "outputId": "6cdbf2b2-cc4f-454d-e5ad-b8a8c1118369"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Fold 1\n",
+            "19/19 [==============================] - 0s 3ms/step\n",
+            "Fold 2\n",
+            "19/19 [==============================] - 0s 2ms/step\n",
+            "Fold 3\n",
+            "19/19 [==============================] - 0s 2ms/step\n",
+            "Fold 4\n",
+            "19/19 [==============================] - 0s 2ms/step\n",
+            "Fold 5\n",
+            "19/19 [==============================] - 0s 2ms/step\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "{'test_accuracy': array([0.79966887, 0.79470199, 0.78807947, 0.79470199, 0.78476821]),\n",
+              " 'test_recall_macro': array([0.80018378, 0.79547294, 0.78783068, 0.79747248, 0.78884631]),\n",
+              " 'test_precision_macro': array([0.80015346, 0.79319876, 0.78507062, 0.78991811, 0.78609285]),\n",
+              " 'test_f1_macro': array([0.79639343, 0.78880829, 0.78233523, 0.78928439, 0.78438168])}"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 22
+        }
+      ],
+      "source": [
+        "cv = StratifiedKFold(n_splits=5, random_state=27, shuffle=True)\n",
+        "\n",
+        "test_f1_macro = []\n",
+        "test_recall_macro = []\n",
+        "test_precision_macro = []\n",
+        "test_accuracy = []\n",
+        "\n",
+        "for i, (idx_train, idx_test) in enumerate(cv.split(X_train_processed, y=y_train_label)):\n",
+        "    print(\"Fold\", i + 1)\n",
+        "\n",
+        "    X_train_set, y_train_set = X_train_processed[idx_train], y_train_label[idx_train]\n",
+        "    X_test_set, y_test_set = X_train_processed[idx_test], y_train_label[idx_test]\n",
+        "\n",
+        "    model = Sequential([\n",
+        "        Dense(250, activation='relu'),\n",
+        "        Dense(150, activation='relu'),\n",
+        "        Dense(len(np.unique(y_train_label)))\n",
+        "    ])\n",
+        "\n",
+        "    model.compile(\n",
+        "        optimizer=Adam(learning_rate=0.001),\n",
+        "        loss=SparseCategoricalCrossentropy(from_logits=True),\n",
+        "        metrics=['accuracy']\n",
+        "    )\n",
+        "\n",
+        "    pipe = Pipeline([\n",
+        "        ('tfidf', DenseTfidfVectorizer()),\n",
+        "        ('model', model)\n",
+        "    ])\n",
+        "\n",
+        "    pipe.fit(\n",
+        "        X_train_set,\n",
+        "        y_train_set,\n",
+        "        **{\"model__epochs\": 50, \"model__verbose\": 0}\n",
+        "    )\n",
+        "\n",
+        "    prediction = pipe.predict(X_test_processed)\n",
+        "    prediction = softmax(prediction)\n",
+        "    pred_label = np.argmax(prediction, axis=1)\n",
+        "\n",
+        "    test_accuracy.append(accuracy_score(y_test_label, pred_label))\n",
+        "    test_recall_macro.append(recall_score(y_test_label, pred_label, average='macro'))\n",
+        "    test_precision_macro.append(precision_score(y_test_label, pred_label, average='macro'))\n",
+        "    test_f1_macro.append(f1_score(y_test_label, pred_label, average='macro'))\n",
+        "\n",
+        "matrics = {\n",
+        "    'test_accuracy': np.array(test_accuracy),\n",
+        "    'test_recall_macro': np.array(test_recall_macro),\n",
+        "    'test_precision_macro': np.array(test_precision_macro),\n",
+        "    'test_f1_macro': np.array(test_f1_macro)\n",
+        "}\n",
+        "matrics"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "cuYvivyUqOI6"
+      },
+      "source": [
+        "### LSTM"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Xo4Ne6sNqKkT",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 901
+        },
+        "outputId": "93c0c6cb-300f-405d-cb14-a131189e6ab4"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Fold 1\n",
+            "Epoch 1/100\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "ValueError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mValueError\u001b[0m                                Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-23-55e6cc422656>\u001b[0m in \u001b[0;36m<cell line: 8>\u001b[0;34m()\u001b[0m\n\u001b[1;32m     30\u001b[0m     )\n\u001b[1;32m     31\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 32\u001b[0;31m     model.fit(\n\u001b[0m\u001b[1;32m     33\u001b[0m         \u001b[0mX_train_set\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     34\u001b[0m         \u001b[0my_train_set\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/keras/utils/traceback_utils.py\u001b[0m in \u001b[0;36merror_handler\u001b[0;34m(*args, **kwargs)\u001b[0m\n\u001b[1;32m     68\u001b[0m             \u001b[0;31m# To get the full stack trace, call:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     69\u001b[0m             \u001b[0;31m# `tf.debugging.disable_traceback_filtering()`\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 70\u001b[0;31m             \u001b[0;32mraise\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mwith_traceback\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfiltered_tb\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     71\u001b[0m         \u001b[0;32mfinally\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     72\u001b[0m             \u001b[0;32mdel\u001b[0m \u001b[0mfiltered_tb\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/keras/engine/training.py\u001b[0m in \u001b[0;36mtf__train_function\u001b[0;34m(iterator)\u001b[0m\n\u001b[1;32m     13\u001b[0m                 \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     14\u001b[0m                     \u001b[0mdo_return\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mTrue\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 15\u001b[0;31m                     \u001b[0mretval_\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mag__\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconverted_call\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mag__\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mld\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mstep_function\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m(\u001b[0m\u001b[0mag__\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mld\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mag__\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mld\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0miterator\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfscope\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     16\u001b[0m                 \u001b[0;32mexcept\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     17\u001b[0m                     \u001b[0mdo_return\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mValueError\u001b[0m: in user code:\n\n    File \"/usr/local/lib/python3.10/dist-packages/keras/engine/training.py\", line 1284, in train_function  *\n        return step_function(self, iterator)\n    File \"/usr/local/lib/python3.10/dist-packages/keras/engine/training.py\", line 1268, in step_function  **\n        outputs = model.distribute_strategy.run(run_step, args=(data,))\n    File \"/usr/local/lib/python3.10/dist-packages/keras/engine/training.py\", line 1249, in run_step  **\n        outputs = model.train_step(data)\n    File \"/usr/local/lib/python3.10/dist-packages/keras/engine/training.py\", line 1050, in train_step\n        y_pred = self(x, training=True)\n    File \"/usr/local/lib/python3.10/dist-packages/keras/utils/traceback_utils.py\", line 70, in error_handler\n        raise e.with_traceback(filtered_tb) from None\n    File \"/usr/local/lib/python3.10/dist-packages/keras/engine/input_spec.py\", line 235, in assert_input_compatibility\n        raise ValueError(\n\n    ValueError: Exception encountered when calling layer 'sequential_5' (type Sequential).\n    \n    Input 0 of layer \"lstm\" is incompatible with the layer: expected ndim=3, found ndim=1. Full shape received: (None,)\n    \n    Call arguments received by layer 'sequential_5' (type Sequential):\n      • inputs=tf.Tensor(shape=(None,), dtype=string)\n      • training=True\n      • mask=None\n"
+          ]
+        }
+      ],
+      "source": [
+        "cv = StratifiedKFold(n_splits=5, random_state=27, shuffle=True)\n",
+        "\n",
+        "test_f1_macro = []\n",
+        "test_recall_macro = []\n",
+        "test_precision_macro = []\n",
+        "test_accuracy = []\n",
+        "\n",
+        "for i, (idx_train, idx_test) in enumerate(cv.split(X_train, y=y_train_label)):\n",
+        "    print(\"Fold\", i + 1)\n",
+        "    X_train_set, y_train_set = X_train[idx_train], y_train_label[idx_train]\n",
+        "    X_test_set, y_test_set = X_train[idx_test], y_train_label[idx_test]\n",
+        "\n",
+        "    max_val = -1\n",
+        "    for x in X_train_set:\n",
+        "        max_val = np.max([max_val, len(x.split(' '))])\n",
+        "\n",
+        "\n",
+        "    model = Sequential([\n",
+        "        LSTM(50, return_sequences=True),\n",
+        "        Dropout(0.2),\n",
+        "        LSTM(150),\n",
+        "        Dropout(0.2),\n",
+        "        Dense(21)\n",
+        "    ])\n",
+        "\n",
+        "    model.compile(\n",
+        "        optimizer='adam',\n",
+        "        loss=SparseCategoricalCrossentropy(from_logits=True),\n",
+        "        metrics=['accuracy']\n",
+        "    )\n",
+        "\n",
+        "    model.fit(\n",
+        "        X_train_set,\n",
+        "        y_train_set,\n",
+        "        epochs=100,\n",
+        "        verbose=2\n",
+        "    )\n",
+        "\n",
+        "    prediction = model.predict(X_test_set)\n",
+        "    prediction = softmax(prediction)\n",
+        "    pred_label = np.argmax(prediction, axis=1)\n",
+        "\n",
+        "    test_accuracy.append(accuracy_score(y_test_set, pred_label))\n",
+        "    test_recall_macro.append(recall_score(y_test_set, pred_label, average='macro'))\n",
+        "    test_precision_macro.append(precision_score(y_test_set, pred_label, average='macro'))\n",
+        "    test_f1_macro.append(f1_score(y_test_set, pred_label, average='macro'))\n",
+        "    break\n",
+        "\n",
+        "matrics = {\n",
+        "    'test_accuracy': np.array(test_accuracy),\n",
+        "    'test_recall_macro': np.array(test_recall_macro),\n",
+        "    'test_precision_macro': np.array(test_precision_macro),\n",
+        "    'test_f1_macro': np.array(test_f1_macro)\n",
+        "}\n",
+        "\n",
+        "matrics"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "QVEcFXqtkY5H"
+      },
+      "outputs": [],
+      "source": [
+        "class Reshape(BaseEstimator, TransformerMixin):\n",
+        "    def __init__(self, shape):\n",
+        "        super().__init__()\n",
+        "        self.shape = shape\n",
+        "\n",
+        "    def fit(self, X, y=None):\n",
+        "        return self\n",
+        "\n",
+        "    def transform(self, X, y=None):\n",
+        "        X = np.array(X)\n",
+        "        shape_list = list(self.shape)\n",
+        "        shape_list = [X.shape[0]] + shape_list\n",
+        "\n",
+        "\n",
+        "        return np.reshape(X, shape_list)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "getb4avojpeY"
+      },
+      "outputs": [],
+      "source": [
+        "cv = StratifiedKFold(n_splits=5, random_state=27, shuffle=True)\n",
+        "\n",
+        "for i, (idx_train, idx_test) in enumerate(cv.split(X_train_processed, y=y_train_label)):\n",
+        "    print(\"Fold\", i + 1)\n",
+        "\n",
+        "    X_train_set, y_train_set = X_train_processed[idx_train], y_train_label[idx_train]\n",
+        "    X_test_set, y_test_set = X_train_processed[idx_test], y_train_label[idx_test]\n",
+        "\n",
+        "    pipe = Pipeline([\n",
+        "        ('tfidf', DenseTfidfVectorizer()),\n",
+        "        ('reshape', Reshape(shape=(-1, 1)))\n",
+        "    ])\n",
+        "\n",
+        "    hasil = pipe.fit_transform(\n",
+        "        X_train_set,\n",
+        "        y_train_set\n",
+        "    )\n",
+        "\n",
+        "    break\n",
+        "\n",
+        "hasil.shape"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "cx_pzRb5jbtH"
+      },
+      "outputs": [],
+      "source": [
+        "cv = StratifiedKFold(n_splits=5, random_state=27, shuffle=True)\n",
+        "\n",
+        "test_f1_macro = []\n",
+        "test_recall_macro = []\n",
+        "test_precision_macro = []\n",
+        "test_accuracy = []\n",
+        "\n",
+        "for i, (idx_train, idx_test) in enumerate(cv.split(X_train_processed, y=y_train_label)):\n",
+        "    print(\"Fold\", i + 1)\n",
+        "\n",
+        "    X_train_set, y_train_set = X_train_processed[idx_train], y_train_label[idx_train]\n",
+        "    X_test_set, y_test_set = X_train_processed[idx_test], y_train_label[idx_test]\n",
+        "\n",
+        "    model = Sequential([\n",
+        "        LSTM(50, return_sequences=True),\n",
+        "        Dropout(0.2),\n",
+        "        LSTM(150),\n",
+        "        Dropout(0.2),\n",
+        "        Dense(len(np.unique(y_train_label)))\n",
+        "    ])\n",
+        "\n",
+        "    model.compile(\n",
+        "        optimizer=Adam(learning_rate=0.001),\n",
+        "        loss=SparseCategoricalCrossentropy(from_logits=True),\n",
+        "        metrics=['accuracy']\n",
+        "    )\n",
+        "\n",
+        "    pipe = Pipeline([\n",
+        "        ('tfidf', DenseTfidfVectorizer()),\n",
+        "        ('reshape', Reshape(shape=(-1, 1))),\n",
+        "        ('model', model)\n",
+        "    ])\n",
+        "\n",
+        "    pipe.fit(\n",
+        "        X_train_set,\n",
+        "        y_train_set,\n",
+        "        **{\"model__epochs\": 50, \"model__verbose\": 2}\n",
+        "    )\n",
+        "\n",
+        "    prediction = pipe.predict(X_test_processed)\n",
+        "    prediction = softmax(prediction)\n",
+        "    pred_label = np.argmax(prediction, axis=1)\n",
+        "\n",
+        "    test_accuracy.append(accuracy_score(y_test_label, pred_label))\n",
+        "    test_recall_macro.append(recall_score(y_test_label, pred_label, average='macro'))\n",
+        "    test_precision_macro.append(precision_score(y_test_label, pred_label, average='macro'))\n",
+        "    test_f1_macro.append(f1_score(y_test_label, pred_label, average='macro'))\n",
+        "\n",
+        "matrics = {\n",
+        "    'test_accuracy': np.array(test_accuracy),\n",
+        "    'test_recall_macro': np.array(test_recall_macro),\n",
+        "    'test_precision_macro': np.array(test_precision_macro),\n",
+        "    'test_f1_macro': np.array(test_f1_macro)\n",
+        "}\n",
+        "matrics"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "v8xVTkVc03MC"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "98qsdgB52yrS"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "collapsed_sections": [
+        "aFeIS4Rhjkxd",
+        "IUD9E7IhTb7l",
+        "YqNyZJ1ssT04",
+        "N-mqElcviiug"
+      ],
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
